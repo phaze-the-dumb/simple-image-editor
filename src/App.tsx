@@ -3,6 +3,7 @@ import { Layer } from "./classes/Layer";
 import { SolidColourLayer } from "./classes/SolidColourLayer";
 import { RectBounds, RectEdges } from "./classes/RectBounds";
 import { LayerListController } from "./classes/LayerListController.tsx";
+import { TextLayer } from "./classes/TextLayer.ts";
 
 const IMAGE_WIDTH = 720;
 const IMAGE_HEIGHT = 1080;
@@ -16,6 +17,8 @@ let App = () => {
   let toolIcons: Array<HTMLElement> = [];
   let selectedToolIcon = -1;
 
+  let allowKeyBinds = true;
+  
   let lerp  = ( a: number, b: number, t: number ) => a + ( b - a ) * t;
 
   let canvasScale = window.innerHeight / IMAGE_HEIGHT - 0.1;
@@ -170,11 +173,15 @@ let App = () => {
     })
 
     canvasContainer.addEventListener('keydown', ( e ) => {
+      if(!allowKeyBinds)return;
+
       if(e.key === ' ')
         isDragDown = true;
     })
 
     window.addEventListener('keyup', ( e ) => {
+      if(!allowKeyBinds)return;
+
       if(e.key === ' ')
         isDragDown = false;
       else if(e.key === 'Escape'){
@@ -182,7 +189,7 @@ let App = () => {
         isMovingLayer = false;
 
         setLayerProperties(<>No Layer Selected</> as HTMLElement);
-      } else if(e.key === "Delete" || e.key === "x"){
+      } else if(e.key === "Delete" || ( e.key === "X" && e.shiftKey )){
         if(layerListContainer.selectedLayer === -1)return;
 
         if(layerListContainer.layers[layerListContainer.selectedLayer].selectable){
@@ -243,13 +250,27 @@ let App = () => {
 
           switch(selectedToolIcon){
             case 0:
-              let rect = new RectBounds(drawStartX, drawStartY, canvasMousePosX - drawStartX, canvasMousePosY - drawStartY);
-              let layer = new SolidColourLayer('#000000');
+              let crect = new RectBounds(drawStartX, drawStartY, canvasMousePosX - drawStartX, canvasMousePosY - drawStartY);
+              let clayer = new SolidColourLayer('#000000');
 
-              layer.name = "Square";
+              clayer.name = "Square";
+              clayer.bounds = crect;
 
-              layer.bounds = rect;
-              layerListContainer.addLayer(layer);
+              layerListContainer.addLayer(clayer);
+
+              selectedToolIcon = -1;
+              toolIcons.forEach(icon => icon.classList.remove('tool-icon-selected'));
+              
+              isDrawing = false;
+              break;
+            case 1:
+              let trect = new RectBounds(canvasMousePosX, canvasMousePosY, 0, 0);
+              let tlayer = new TextLayer('#000000');
+
+              tlayer.name = "Text";
+              tlayer.bounds = trect;
+
+              layerListContainer.addLayer(tlayer);
 
               selectedToolIcon = -1;
               toolIcons.forEach(icon => icon.classList.remove('tool-icon-selected'));
@@ -405,12 +426,27 @@ let App = () => {
             }}>
               <img src="./square-solid.svg" />
             </div>
+            <div class="tool-icon" ref={( el ) => toolIcons[1] = el} onClick={() => {
+              if(selectedToolIcon === 1){
+                selectedToolIcon = -1;
+                toolIcons.forEach(icon => icon.classList.remove('tool-icon-selected'));
+
+                return;
+              }
+
+              selectedToolIcon = 1;
+
+              toolIcons.forEach(icon => icon.classList.remove('tool-icon-selected'));
+              toolIcons[selectedToolIcon].classList.add('tool-icon-selected');
+            }}>
+              <img src="./font-solid.svg" />
+            </div>
           </div>
 
           <br /><br />
           
           Layer Properties:<br />
-          <div class="layer-properties">{ layerProperties() }</div>
+          <div class="layer-properties" onMouseEnter={() => allowKeyBinds = false} onMouseLeave={() => { allowKeyBinds = true }}>{ layerProperties() }</div>
         </div>
       </div>
     </>

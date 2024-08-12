@@ -27,6 +27,13 @@ let propertiesFromLayer = ( layer: Layer ): HTMLElement => {
                   layer[item.toLowerCase()] = e.target.value
                 }} />
               </Match>
+              <Match when={propertyTypes[index()] === "int"}>
+                {/* @ts-ignore */}
+                <input type="int" value={ layer[item.toLowerCase()] } onChange={( e ) => {
+                  // @ts-ignore
+                  layer[item.toLowerCase()] = parseInt(e.target.value)
+                }} />
+              </Match>
             </Switch>
 
             <br />
