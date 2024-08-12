@@ -195,7 +195,7 @@ let App = () => {
         if(layerListContainer.layers[layerListContainer.selectedLayer].selectable){
           layerListContainer.removeLayer(layerListContainer.selectedLayer);
           layerListContainer.select(-1);
-        }
+        } 
       }
     })
 
