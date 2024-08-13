@@ -4,10 +4,14 @@ import { RectBounds } from "./RectBounds";
 class TextLayer extends Layer{
   type: LayerType = LayerType.TEXT;
   colour: string;
+
   text: string = "Text";
   fontsize: number = 40;
 
-  editableProperties: any = { "Colour": "colour", "Text": "text", 'FontSize': 'int' };
+  bold: boolean = false;
+  italics: boolean = false;
+
+  editableProperties: any = { "Colour": "colour", "Text": "text", 'FontSize': 'int', "Bold": "bool", "Italics": "bool" };
 
   constructor( colour: string ){
     let bounds = new RectBounds(0, 0, 100, 100);
@@ -17,7 +21,7 @@ class TextLayer extends Layer{
   }
 
   render( ctx: CanvasRenderingContext2D, _canvas: HTMLCanvasElement ){
-    ctx.font = this.fontsize +  "px Arial";
+    ctx.font = ( this.bold ? "bold " : "" ) + ( this.italics ? "italic " : "" ) + this.fontsize +  "px Arial";
     let size = ctx.measureText(this.text);
 
     this.bounds.width = size.width;

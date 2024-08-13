@@ -53,6 +53,8 @@ let App = () => {
   let isMovingLayer = false;
   let movingSide = RectEdges.NONE;
 
+  let isMouseDown = false;
+
   let render = () => {
     let rect = canvas.getBoundingClientRect();
 
@@ -90,7 +92,8 @@ let App = () => {
           ctx.strokeStyle = '#005599';
           ctx.lineWidth = 4;
         
-          movingSide = side;
+          if(!isMouseDown)
+            movingSide = side;
 
           switch(side){
             case RectEdges.LEFT:
@@ -205,6 +208,8 @@ let App = () => {
           isDragDown = true;
           break;
         case 0:
+          isMouseDown = true;
+
           if(selectedToolIcon === -1){
             layerListContainer.select(-1);
             isMovingLayer = false;
@@ -240,6 +245,8 @@ let App = () => {
           isDragDown = false;
           break;
         case 0:
+          isMouseDown = false;
+          
           if(!isDrawing){
             if(isMovingLayer){
               isMovingLayer = false;

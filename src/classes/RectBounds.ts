@@ -32,12 +32,12 @@ class RectBounds{
     if(
       this.x < x &&
       this.y < y &&
-      this.x + 5 > x &&
+      this.x + 10 > x &&
       this.y + this.height > y
     ) return RectEdges.LEFT;
 
     if(
-      this.x + this.width - 5 < x &&
+      this.x + this.width - 10 < x &&
       this.y < y &&
       this.x + this.width > x &&
       this.y + this.height > y
@@ -47,12 +47,12 @@ class RectBounds{
       this.x < x &&
       this.y < y &&
       this.x + this.width > x &&
-      this.y + 5 > y
+      this.y + 10 > y
     ) return RectEdges.TOP;
 
     if(
       this.x < x &&
-      this.y + this.height - 5 < y &&
+      this.y + this.height - 10 < y &&
       this.x + this.width > x &&
       this.y + this.height > y
     ) return RectEdges.BOTTOM;

@@ -29,9 +29,17 @@ let propertiesFromLayer = ( layer: Layer ): HTMLElement => {
               </Match>
               <Match when={propertyTypes[index()] === "int"}>
                 {/* @ts-ignore */}
-                <input type="int" value={ layer[item.toLowerCase()] } onChange={( e ) => {
+                <input type="number" value={ layer[item.toLowerCase()] } onChange={( e ) => {
                   // @ts-ignore
                   layer[item.toLowerCase()] = parseInt(e.target.value)
+                }} />
+              </Match>
+              <Match when={propertyTypes[index()] === "bool"}>
+                {/* @ts-ignore */}
+                <input type="checkbox" checked={ layer[item.toLowerCase()] } onChange={( e ) => {
+                  console.log(e.target.checked);
+                  // @ts-ignore
+                  layer[item.toLowerCase()] = e.target.checked
                 }} />
               </Match>
             </Switch>

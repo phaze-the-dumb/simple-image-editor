@@ -85,6 +85,20 @@ class LayerListController{
         this.select(i);
       }
 
+      l.ondblclick = () => {
+        let name = l.innerText;
+        l.innerHTML = '';
+
+        l.appendChild(<input value={ name } onChange={( e ) => {
+          name = e.target.value;
+
+          this.layers[i].name = name;
+          l.innerText = name;
+
+          this.select(i);
+        }} /> as HTMLElement)
+      }
+
       l.onmouseover = () => {
         this.lastLayerOver = i;
       }
